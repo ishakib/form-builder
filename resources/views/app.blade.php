@@ -23,9 +23,12 @@
         @section('side-bar')
             @include('sections.sidebar')
         @show
-        <main class="py-4">
-            @yield('content')
-        </main>
+            <div class="container-fluid page-body-wrapper">
+                <div class="main-panel">
+                    <!--Contents-->
+                    @yield('contents')
+                </div>
+            </div>
 
         @include('sections.footer')
     </div>

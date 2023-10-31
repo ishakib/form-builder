@@ -10,16 +10,12 @@ class SidebarComposer
     {
         $view->with(['data' => [
             [
-                'icon' => 'pie-chart',
-                'name' => 'Dashboard',
-                'url' => request()->root() . '/admin/dashboard',
-                'permission' => true,
+                'name' => 'Form Create',
+                'url' => request()->root() . '/admin/form-create',
             ],
             [
-                'icon' => 'pie-chart',
-                'name' => 'Calte',
-                'url' => request()->root() . '/admin/dashboard',
-                'permission' => true,
+                'name' => 'Form Submit',
+                'url' => request()->root() . '/admin/form-submit',
             ],
         ]]);
     }

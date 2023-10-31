@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\NavigationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('app');
 });
+
+Route::get('admin/form-create',[NavigationController::class, 'formCreate']);
+Route::get('admin/form-submit',[NavigationController::class, 'formSubmit']);
