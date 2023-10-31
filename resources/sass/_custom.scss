@@ -1,0 +1,11 @@
+// Here you can add other styles
+
+@import "side_bar";
+@import "nav_bar";
+.c-header.c-header-fixed{
+    top:0px;
+}
+
+.click-file{
+    cursor:pointer;
+}
