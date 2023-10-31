@@ -1,14 +1,10 @@
 <template>
     <div>
         <nav id="sidebar">
-            <ul class="mt-5 list-unstyled components">
+            <ul class="mt-4 list-unstyled components" v-for="item in data">
                 <li>
-                    <a href="#">Dashboard</a>
+                    <a href="#">{{ item.name }}</a>
                 </li>
-                <li>
-                    <a href="#">Profile</a>
-                </li>
-                <!-- Add more menu items as needed -->
             </ul>
         </nav>
     </div>
@@ -16,7 +12,15 @@
 
 <script>
 export default {
-    name: "Sidebar.vue"
+    name: "Sidebar.vue",
+    props: {
+        data: {
+            required: true
+        },
+    },
+    data() {
+        return {}
+    }
 }
 </script>
 

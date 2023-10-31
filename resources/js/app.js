@@ -4,7 +4,7 @@ import Vue from 'vue';
 window.Vue = Vue;
 
 
-Vue.component('side-bar', require('./Components/Views/Layouts/Sidebar.vue').default);
+Vue.component('side-bar', require('./Components/Views/Layouts/Sidebar').default);
 
 
 const app = new Vue({

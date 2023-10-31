@@ -1,1 +1,3 @@
-<side-bar></side-bar>
+<side-bar
+    :data="{{ json_encode($data) }}"
+></side-bar>

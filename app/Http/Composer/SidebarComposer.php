@@ -8,11 +8,19 @@ class SidebarComposer
 {
     public function compose(View $view)
     {
-        //$table = CustomTable::all();
-
-        $menu = [];
-
-
-        $view->with(['data' => $menu]);
+        $view->with(['data' => [
+            [
+                'icon' => 'pie-chart',
+                'name' => 'Dashboard',
+                'url' => request()->root() . '/admin/dashboard',
+                'permission' => true,
+            ],
+            [
+                'icon' => 'pie-chart',
+                'name' => 'Calte',
+                'url' => request()->root() . '/admin/dashboard',
+                'permission' => true,
+            ],
+        ]]);
     }
 }
