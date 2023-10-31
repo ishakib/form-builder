@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Helpers\Core\Traits;
+namespace App\Helpers\Basic\Traits;
 
 
 use Illuminate\Support\Arr;
