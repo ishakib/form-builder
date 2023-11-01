@@ -1,162 +1,210 @@
 <template>
-    <div>
-        <div class="form-builder">
-            <div v-if="fields.length === 0" class="no-fields-message">
-                <div class="alert alert-info" role="alert">
-                    No fields attached. Click "Add Field" to get started.
-                </div>
+    <div class="form-builder">
+        <div v-for="(section, sectionIndex) in sections" :key="sectionIndex" class="section">
+            <div class="section-header">
+                <h4 class="section-title">
+          <span v-if="section.editingTitle">
+            <input
+                v-model="section.title"
+                @blur="saveSectionTitle(sectionIndex)"
+                @keydown.enter="saveSectionTitle(sectionIndex)"
+                @keydown.esc="cancelEditSectionTitle(sectionIndex)"
+                class="section-title-input form-control"
+            />
+            <button @click="saveSectionTitle(sectionIndex)" class="btn btn-primary mt-3 ">Save</button>
+            <button @click="cancelEditSectionTitle(sectionIndex)" class="btn btn-secondary mt-3">Cancel</button>
+          </span>
+                    <span v-else>
+            {{ section.title }}
+            <button @click="editSectionTitle(sectionIndex)" class="btn btn-outline-primary ml-2">Edit</button>
+          </span>
+                </h4>
+                <button @click="removeSection(sectionIndex)" class="btn btn-danger">Remove Section</button>
             </div>
-
-            <draggable v-else v-model="fields" element="div" class="form-fields">
-                <div v-for="(field, index) in fields" :key="index" class="form-field card">
-                    <div class="form-field-header card-header">
-                        <h5 class="mb-0">Field {{ index + 1 }}</h5>
-                        <button @click="removeField(index)" class="btn btn-danger btn-sm">Remove</button>
-                    </div>
+            <draggable v-model="section.content" element="div" class="form-fields">
+                <div v-for="(item, itemIndex) in section.content" :key="itemIndex" class="form-field card">
                     <div class="form-field-content card-body">
-                        <div class="form-group">
-                            <label for="field-type">Field Type:</label>
-                            <select v-model="field.type" class="form-control">
-                                <option value="short_answer">Short Answer</option>
-                                <option value="long_answer">Long Answer</option>
-                                <option value="multiple_choice">Multiple Choice</option>
-                                <option value="checkbox">Checkbox</option>
-                                <option value="dropdown">Dropdown</option>
-                                <option value="time">Time</option>
-                                <option value="date">Date</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="field-label">Field Label:</label>
-                            <input type="text" v-model="field.label" class="form-control" placeholder="Enter field label" />
-                        </div>
-                        <div v-if="field.type === 'multiple_choice'" class="form-group">
-                            <label for="field-choices">Choices (comma-separated):</label>
-                            <input type="text" v-model="field.choices" class="form-control" placeholder="Choice 1, Choice 2, ..." />
+                        <div class="form-group d-flex">
+                            <div class="form-input p-2">
+                                <label for="label">Label Name:</label>
+                                <input v-model="item.label" type="text" class="form-control" id="label">
+                            </div>
+                            <div class="form-input p-2">
+                                <label for="inputType">Select an Input Type:</label>
+                                <select v-model="item.type" class="form-control" id="inputType">
+                                    <option v-for="type in inputTypes" :key="type.value" :value="type.value">{{ type.label }}</option>
+                                </select>
+                            </div>
+                            <button @click="removeItem(sectionIndex, itemIndex)" class="btn btn-danger btn-sm align-self-center">Remove</button>
                         </div>
                     </div>
                 </div>
             </draggable>
+            <div class="add-subsection-section p-3 border rounded mt-4">
+                <button @click="addSubsection(sectionIndex)" class="btn btn-info p-2" style="margin-left: 10px;">Add Subsection</button>
+            </div>
         </div>
-        <button @click="addField" class="btn btn-primary mt-3">Add Field</button>
-        <button @click="submitForm" class="btn btn-primary mt-3">Submit Form</button>
+        <div class="add-section-section p-3 border rounded mt-4">
+            <h4 class="add-section-title">Add a New Section</h4>
+            <div class="form-input p-2">
+                <label for="sectionTitle">Section Title:</label>
+                <input v-model="newSectionTitle" type="text" class="form-control" id="sectionTitle">
+            </div>
+            <button @click="addSection" class="btn btn-success" style="margin-left: 10px;">Add Section</button>
+        </div>
+        <div class="mt-3">
+            <div class="d-flex justify-content-between">
+                <button @click="submitForm" class="btn btn-primary w-100">Submit Form</button>
+            </div>
+        </div>
 
     </div>
 </template>
 
 <script>
-import draggable from 'vuedraggable';
-import axios from 'axios';
+import draggable from "vuedraggable";
+import ShortAnswerField from "./Input/ShortText.vue";
+import LongAnswerField from "./Input/LongText.vue";
+import CheckBoxField from "./Input/CheckBox.vue";
+import MultipleChoiceAnswerField from "./Input/MultipleChoice.vue";
+import DropDownField from "./Input/DropDown.vue";
+import TimeField from "./Input/Time.vue";
+import DateField from "./Input/Date.vue";
+
 export default {
     name: "FormCreateIndex",
     components: {
-        draggable, // Register the draggable component
+        draggable,
+        ShortAnswerField,
+        LongAnswerField,
+        CheckBoxField,
+        MultipleChoiceAnswerField,
+        DropDownField,
+        TimeField,
+        DateField,
     },
     data() {
         return {
-            fields: [], // Store form fields
+            sections: [],
+            newSectionTitle: "",
+            inputTypes: [
+                {value: "short_answer", label: "Short Answer"},
+                {value: "long_answer", label: "Long Answer"},
+                {value: "checkbox", label: "Checkbox"},
+                {value: "multiple_choice", label: "Multiple Choice"},
+                {value: "dropdown", label: "Dropdown"},
+                {value: "time", label: "Time"},
+                {value: "date", label: "Date"}
+            ]
         };
     },
     methods: {
-        addField() {
-            this.fields.push({
-                type: 'short_answer',
-                label: 'Field Label',
-                choices: '', // For multiple_choice, checkbox, dropdown fields
+        addSection() {
+            if (this.newSectionTitle) {
+                this.sections.push({
+                    title: this.newSectionTitle,
+                    editingTitle: false,
+                    content: [],
+                });
+                this.newSectionTitle = "";
+            }
+        },
+        addSubsection(sectionIndex) {
+            this.sections[sectionIndex].content.push({
+                type: "short_answer",
+                label: "",
             });
         },
-        removeField(index) {
-            this.fields.splice(index, 1);
+        editSectionTitle(sectionIndex) {
+            this.sections[sectionIndex].editingTitle = true;
+        },
+        saveSectionTitle(sectionIndex) {
+            this.sections[sectionIndex].editingTitle = false;
+        },
+        cancelEditSectionTitle(sectionIndex) {
+            this.sections[sectionIndex].editingTitle = false;
+        },
+        removeSection(sectionIndex) {
+            this.sections.splice(sectionIndex, 1);
+        },
+        removeItem(sectionIndex, itemIndex) {
+            this.sections[sectionIndex].content.splice(itemIndex, 1);
         },
         submitForm() {
-            // Prepare the data to be sent
             const formData = {
-                fields: this.fields,
+                sections: this.sections,
             };
 
-            console.log(formData)
-            // Make a POST request to your server
+            console.log(formData);
+
+            // Send a POST request with Axios here
             // axios.post('/your-api-endpoint', formData)
-            //     .then(response => {
-            //         // Handle a successful response here
-            //         console.log('Form submitted successfully');
-            //     })
-            //     .catch(error => {
-            //         // Handle any errors here
-            //         console.error('Error submitting the form', error);
-            //     });
+            //   .then(response => {
+            //     console.log('Form submitted successfully');
+            //   })
+            //   .catch(error => {
+            //     console.error('Error submitting the form', error);
+            //   });
         },
-    },
-};
+        fieldComponentName(type) {
+            const componentMap = {
+                short_answer: "ShortAnswerField",
+                long_answer: "LongAnswerField",
+                checkbox: "CheckBoxField",
+                multiple_choice: "MultipleChoiceAnswerField",
+                dropdown: "DropDownField",
+                time: "TimeField",
+                date: "DateField",
+            };
+            return componentMap[type] || "div";
+        },
+    }
+}
 </script>
 
 <style scoped>
 .form-builder {
-    border: 1px solid #ccc;
+    max-width: 800px;
+    margin: 0 auto;
     padding: 20px;
+}
+.section {
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    margin: 20px 0;
     border-radius: 5px;
 }
-
-.form-field {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    margin: 15px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.form-field-header {
+.section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px 20px;
+    background-color: #e4e7ea;
+    color: #5c6873;
 }
-
-.form-field-header h3 {
-    font-size: 18px;
+.section-title {
     margin: 0;
 }
-
-.form-field-header button {
-    background-color: #ff5252;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
+.section-title-input {
+    width: 70%;
 }
-
-.form-field-content {
-    margin-top: 10px;
-}
-
-.form-field-type select,
-.form-field-label input,
-.form-field-choices input {
-    width: 100%;
-    padding: 8px;
+.form-field {
     border: 1px solid #ddd;
-    border-radius: 3px;
-    margin-top: 8px;
-}
-
-.form-field-choices label {
-    margin-top: 10px;
-}
-.no-fields-message {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.no-fields-message .alert {
-    background-color: #d6e9c6; /* Change the background color */
-    border-color: #c6e1b6; /* Change the border color */
-    color: #3c763d; /* Change the text color */
-    font-size: 16px; /* Change the font size */
     border-radius: 5px;
+    margin: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
-
-
-/* Add more styles as needed */
+.form-input {
+    flex: 1;
+}
+.add-section-title {
+    margin: 0;
+}
+.add-section-section {
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
 </style>

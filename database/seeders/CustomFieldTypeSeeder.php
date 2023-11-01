@@ -20,7 +20,6 @@ class CustomFieldTypeSeeder extends Seeder
             ['name' => 'select'],
             ['name' => 'date'],
             ['name' => 'number'],
-            ['name' => 'dropzone'],
         ];
 
         CustomFieldType::query()->insert($field_types);
