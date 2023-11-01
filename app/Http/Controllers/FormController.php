@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CustomFieldRequest;
 use App\Http\Requests\SubmitedFromRequest;
-use App\Models\CustomField;
 use App\Models\Form;
-use App\Services\Form\CustomFieldService;
 use App\Services\Form\FormService;
 
 class FormController extends Controller
@@ -33,8 +30,8 @@ class FormController extends Controller
      */
     public function store(SubmitedFromRequest $request)
     {
-        dd("called", $request->all());
-        $this->service->save($request->only('name', 'editing_title'));
+        $this->service->save($request->only('title', 'editing_title'));
+        $this->service->saveCustomField();
         return created_responses('form');
     }
 

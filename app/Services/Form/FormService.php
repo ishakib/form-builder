@@ -13,4 +13,16 @@ class FormService extends BaseService
     {
         $this->model = $form;
     }
+
+    public function saveCustomField()
+    {
+        // Loop through the content data (custom fields) and create associated custom fields
+        foreach (request()->input('content') as $customFieldData) {
+            $this->model->customFields()->create([
+                'name' => $customFieldData['label'],
+                'context' => $customFieldData['type'],
+            ]);
+        }
+        return $this;
+    }
 }
