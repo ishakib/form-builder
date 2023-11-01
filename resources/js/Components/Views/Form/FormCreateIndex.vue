@@ -57,7 +57,6 @@
                 <button @click="submitForm" class="btn btn-primary w-100">Submit Form</button>
             </div>
         </div>
-
     </div>
 </template>
 

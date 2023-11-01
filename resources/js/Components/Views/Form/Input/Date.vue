@@ -1,13 +1,24 @@
 <template>
-
+    <div>
+        <label>{{ field.label }}</label>
+        <datepicker v-model="selectedDate" format="yyyy-MM-dd"></datepicker>
+    </div>
 </template>
 
 <script>
+import Datepicker from 'vuejs-datepicker';
+
 export default {
-    name: "Date"
-}
+    components: {
+        Datepicker,
+    },
+    props: {
+        field: Object,
+    },
+    data() {
+        return {
+            selectedDate: '',
+        };
+    },
+};
 </script>
-
-<style scoped>
-
-</style>
