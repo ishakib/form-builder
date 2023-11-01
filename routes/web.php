@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomFieldController;
+use App\Http\Controllers\FormController;
 use App\Http\NavigationController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+auth()->loginUsingId(1);
 Route::get('/', function () {
     return view('app');
 });
@@ -22,4 +23,5 @@ Route::get('/', function () {
 Route::get('admin/form-create',[NavigationController::class, 'formCreate']);
 Route::get('admin/form-submit',[NavigationController::class, 'formSubmit']);
 
-Route::resource('custom-Fields', CustomFieldController::class);
+Route::resource('admin/form', FormController::class);
+Route::resource('admin/custom-Fields', CustomFieldController::class);

@@ -130,80 +130,19 @@ export default {
             this.sections[sectionIndex].content.splice(itemIndex, 1);
         },
         submitForm() {
-            const formData = {
-                sections: this.sections,
-            };
-
-            console.log(formData);
-
-            // Send a POST request with Axios here
-            // axios.post('/your-api-endpoint', formData)
-            //   .then(response => {
-            //     console.log('Form submitted successfully');
-            //   })
-            //   .catch(error => {
-            //     console.error('Error submitting the form', error);
-            //   });
-        },
-        fieldComponentName(type) {
-            const componentMap = {
-                short_answer: "ShortAnswerField",
-                long_answer: "LongAnswerField",
-                checkbox: "CheckBoxField",
-                multiple_choice: "MultipleChoiceAnswerField",
-                dropdown: "DropDownField",
-                time: "TimeField",
-                date: "DateField",
-            };
-            return componentMap[type] || "div";
+            const formData = this.sections;
+            axios.post('/admin/form', formData)
+              .then(response => {
+                console.log('Form submitted successfully');
+              })
+              .catch(error => {
+                console.error('Error submitting the form', error);
+              });
         },
     }
 }
 </script>
 
 <style scoped>
-.form-builder {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-.section {
-    background-color: #f7f7f7;
-    border: 1px solid #ccc;
-    margin: 20px 0;
-    border-radius: 5px;
-}
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #e4e7ea;
-    color: #5c6873;
-}
-.section-title {
-    margin: 0;
-}
-.section-title-input {
-    width: 70%;
-}
-.form-field {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin: 15px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.form-input {
-    flex: 1;
-}
-.add-section-title {
-    margin: 0;
-}
-.add-section-section {
-    background-color: #f7f7f7;
-    border: 1px solid #ccc;
-    margin-top: 20px;
-    border-radius: 5px;
-    padding: 10px 20px;
-}
+
 </style>
