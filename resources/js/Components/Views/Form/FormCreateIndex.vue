@@ -11,7 +11,7 @@
                 @keydown.esc="cancelEditSectionTitle(sectionIndex)"
                 class="section-title-input form-control"
             />
-            <button @click="saveSectionTitle(sectionIndex)" class="btn btn-primary mt-3 ">Save</button>
+            <button @click="saveSectionTitle(sectionIndex)" class="btn btn-primary mt-3">Save</button>
             <button @click="cancelEditSectionTitle(sectionIndex)" class="btn btn-secondary mt-3">Cancel</button>
           </span>
                     <span v-else>
@@ -32,16 +32,27 @@
                             <div class="form-input p-2">
                                 <label for="inputType">Select an Input Type:</label>
                                 <select v-model="item.type" class="form-control" id="inputType">
-                                    <option v-for="type in inputTypes" :key="type.value" :value="type.value">{{ type.label }}</option>
+                                    <option v-for="type in inputTypes" :key="type.value" :value="type.value">
+                                        {{ type.label }}
+                                    </option>
                                 </select>
                             </div>
-                            <button @click="removeItem(sectionIndex, itemIndex)" class="btn btn-danger btn-sm align-self-center">Remove</button>
+                            <button @click="removeItem(sectionIndex, itemIndex)"
+                                    class="btn btn-danger btn-sm align-self-center">Remove
+                            </button>
                         </div>
+                        <component
+                            :is="fieldComponentName(item.type)"
+                            :field="item"
+                            @update-option-label="updateOptionLabel"
+                        />
                     </div>
                 </div>
             </draggable>
             <div class="add-subsection-section p-3 border rounded mt-4">
-                <button @click="addSubsection(sectionIndex)" class="btn btn-info p-2" style="margin-left: 10px;">Add Subsection</button>
+                <button @click="addSubsection(sectionIndex)" class="btn btn-info p-2" style="margin-left: 10px;">Add
+                    Subsection
+                </button>
             </div>
         </div>
         <div class="add-section-section p-3 border rounded mt-4">
@@ -54,7 +65,7 @@
         </div>
         <div class="mt-3">
             <div class="d-flex justify-content-between">
-                <button @click="submitForm" class="btn btn-primary">Submit Form</button>
+                <button @click="submitForm" class="btn btn-primary w-100">Submit Form</button>
             </div>
         </div>
     </div>
@@ -110,9 +121,16 @@ export default {
         },
         addSubsection(sectionIndex) {
             this.sections[sectionIndex].content.push({
-                type: "short_answer",
-                label: "",
+                type: "checkbox",
+                label: "Your Label Here",
+                options: [{ label: "", value: "", checked: false }],
             });
+        },
+
+        // Add this method to update option label
+        updateOptionLabel(field, index) {
+            // Triggered when an option's label is updated in the child component
+            // Do any necessary processing here
         },
         editSectionTitle(sectionIndex) {
             this.sections[sectionIndex].editingTitle = true;
@@ -123,6 +141,9 @@ export default {
         cancelEditSectionTitle(sectionIndex) {
             this.sections[sectionIndex].editingTitle = false;
         },
+        removeSection(sectionIndex) {
+            this.sections.splice(sectionIndex, 1);
+        },
         removeItem(sectionIndex, itemIndex) {
             this.sections[sectionIndex].content.splice(itemIndex, 1);
         },
@@ -130,8 +151,6 @@ export default {
             const formData = {
                 sections: this.sections,
             };
-
-
             // Send a POST request with Axios here
             // axios.post('/your-api-endpoint', formData)
             //   .then(response => {
@@ -153,53 +172,13 @@ export default {
             };
             return componentMap[type] || "div";
         },
+        addOption(sectionIndex, itemIndex) {
+            this.sections[sectionIndex].content[itemIndex].options.push({label: "New Option", value: ""});
+        },
     }
 }
 </script>
 
 <style scoped>
-.form-builder {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-.section {
-    background-color: #f7f7f7;
-    border: 1px solid #ccc;
-    margin: 20px 0;
-    border-radius: 5px;
-}
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #e4e7ea;
-    color: #5c6873;
-}
-.section-title {
-    margin: 0;
-}
-.section-title-input {
-    width: 70%;
-}
-.form-field {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin: 15px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.form-input {
-    flex: 1;
-}
-.add-section-title {
-    margin: 0;
-}
-.add-section-section {
-    background-color: #f7f7f7;
-    border: 1px solid #ccc;
-    margin-top: 20px;
-    border-radius: 5px;
-    padding: 10px 20px;
-}
+/* Your styles go here */
 </style>

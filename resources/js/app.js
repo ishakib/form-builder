@@ -17,7 +17,7 @@ Vue.component('dropdown', require('./Components/Views/Form/Input/DropDown.vue').
 Vue.component('time-picker', require('./Components/Views/Form/Input/Time.vue').default);
 Vue.component('date-picker', require('./Components/Views/Form/Input/Date.vue').default);
 
-
+import 'font-awesome/css/font-awesome.min.css';
 const app = new Vue({
     el: '#app',
 });
