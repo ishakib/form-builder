@@ -2,24 +2,23 @@
     <div class="form-builder">
         <div v-for="(section, sectionIndex) in sections" :key="sectionIndex" class="section">
             <div class="section-header">
-                <h4 class="section-title">
-          <span v-if="section.editingTitle">
-            <input
-                v-model="section.title"
-                @blur="saveSectionTitle(sectionIndex)"
-                @keydown.enter="saveSectionTitle(sectionIndex)"
-                @keydown.esc="cancelEditSectionTitle(sectionIndex)"
-                class="section-title-input form-control"
-            />
-            <button @click="saveSectionTitle(sectionIndex)" class="btn btn-primary mt-3">Save</button>
-            <button @click="cancelEditSectionTitle(sectionIndex)" class="btn btn-secondary mt-3">Cancel</button>
-          </span>
-                    <span v-else>
-            {{ section.title }}
-            <button @click="editSectionTitle(sectionIndex)" class="btn btn-outline-primary ml-2">Edit</button>
-          </span>
-                </h4>
-                <button @click="removeSection(sectionIndex)" class="btn btn-danger">Remove Section</button>
+                <div class="section-title">
+                      <span v-if="section.editingTitle">
+                        <input
+                            v-model="section.title"
+                            @blur="saveSectionTitle(sectionIndex)"
+                            @keydown.enter="saveSectionTitle(sectionIndex)"
+                            @keydown.esc="cancelEditSectionTitle(sectionIndex)"
+                            class="section-title-input form-control"
+                        />
+                        <button @click="saveSectionTitle(sectionIndex)" class="btn btn-primary mt-3">Save</button>
+                        <button @click="cancelEditSectionTitle(sectionIndex)" class="btn btn-secondary mt-3">Cancel</button>
+                      </span>
+                    <span v-else> {{ section.title }}
+                        <button @click="editSectionTitle(sectionIndex)" class="btn btn-outline-primary ml-2">Edit</button>
+                    </span>
+                </div>
+                <span class="fa fa-trash cp" @click="removeSection(sectionIndex)"></span>
             </div>
             <draggable v-model="section.content" element="div" class="form-fields">
                 <div v-for="(item, itemIndex) in section.content" :key="itemIndex" class="form-field card">
@@ -37,9 +36,7 @@
                                     </option>
                                 </select>
                             </div>
-                            <button @click="removeItem(sectionIndex, itemIndex)"
-                                    class="btn btn-danger btn-sm align-self-center">Remove
-                            </button>
+                            <span class="fa fa-trash cp" @click="removeItem(sectionIndex, itemIndex)"></span>
                         </div>
                         <component
                             :is="fieldComponentName(item.type)"
@@ -56,7 +53,6 @@
             </div>
         </div>
         <div class="add-section-section p-3 border rounded mt-4">
-            <h4 class="add-section-title">Add a New Section</h4>
             <div class="form-input p-2">
                 <label for="sectionTitle">Section Title:</label>
                 <input v-model="newSectionTitle" type="text" class="form-control" id="sectionTitle">
@@ -122,8 +118,8 @@ export default {
         addSubsection(sectionIndex) {
             this.sections[sectionIndex].content.push({
                 type: "checkbox",
-                label: "Your Label Here",
-                options: [{ label: "", value: "", checked: false }],
+                label: "",
+                options: [{label: "", value: "", checked: false}],
             });
         },
 
