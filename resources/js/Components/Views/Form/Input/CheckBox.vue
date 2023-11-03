@@ -1,23 +1,35 @@
 <template>
     <div>
         <label>{{ field.label }}</label>
-        <input type="checkbox" v-model="checked" />
+        <div v-for="(option, index) in field.options" :key="index">
+            <input type="checkbox" :id="getOptionId(index)" :value="option.value" v-model="selectedOptions" />
+            <label :for="getOptionId(index)">{{ option.label }}</label>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
     props: {
-        field: Object,
+        field: {
+            type: Object,
+            required: true,
+        },
     },
     data() {
         return {
-            checked: false,
+            selectedOptions: [], // Store selected options
         };
     },
     watch: {
-        checked() {
-            this.$emit('input', this.checked);
+        selectedOptions() {
+            this.$emit('input', this.selectedOptions);
+        },
+    },
+    methods: {
+        getOptionId(index) {
+            // Create a unique ID for each option
+            return `option_${index}`;
         },
     },
 };
