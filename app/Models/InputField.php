@@ -5,14 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Form extends Model
+class InputField extends Model
 {
     use HasFactory;
     protected $fillable = ['name'];
-
-    public function sections()
-    {
-        return $this->hasMany(Section::class);
-    }
-
 }

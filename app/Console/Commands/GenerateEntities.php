@@ -108,23 +108,25 @@ class GenerateEntities extends Command
     private function getDatabaseStructure(): array
     {
         return [
-            'custom_field_types' => [
+            'input_fields' => [
                 'name' => 'string',
             ],
-            'custom_fields' => [
-                'custom_field_type_id' => 'unsignedBigInteger',
-                'created_by' => 'unsignedBigInteger',
+            'forms' => [
                 'name' => 'string',
-                'context' => 'string',
-                'meta' => 'text',
-                'in_list' => 'boolean',
+                'editing_title' => 'boolean',
+
             ],
-            'custom_field_values' => [
-                'value' => 'text',
-                'contextable_type' => 'text',
-                'contextable_id' => 'text',
-                'custom_field_id' => 'text',
-                'updated_by' => 'text',
+            'sections' => [
+                'title' => 'text',
+                'editing_title' => 'boolean',
+            ],
+            'contents' => [
+                'title' => 'text',
+                'editing_title' => 'boolean',
+            ],
+            'options' => [
+                'title' => 'text',
+                'editing_title' => 'boolean',
             ],
         ];
     }

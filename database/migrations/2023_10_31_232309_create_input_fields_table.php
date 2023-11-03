@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('forms', function (Blueprint $table) {
-            $table->id();
+        Schema::create('input_fields', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->string('name');
-            $table->boolean('editing_title')->default(false);
             $table->timestamps();
         });
     }
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('forms');
+        Schema::dropIfExists('custom_field_types');
     }
 };

@@ -3,7 +3,6 @@
 
 namespace App\Services\Form;
 
-use App\Models\CustomField;
 use App\Models\Form;
 use App\Services\BaseService;
 
@@ -14,15 +13,42 @@ class FormService extends BaseService
         $this->model = $form;
     }
 
-    public function saveCustomField()
+    public function save($options = [])
     {
-        // Loop through the content data (custom fields) and create associated custom fields
-        foreach (request()->input('content') as $customFieldData) {
-            $this->model->customFields()->create([
-                'name' => $customFieldData['label'],
-                'context' => $customFieldData['type'],
-            ]);
-        }
+        $attributes = count($options) ? $options : request()->all();
+
+        $this->model
+            ->fill($this->getFillAble($attributes))
+            ->save();
+
         return $this;
     }
+
+    public function saveManySections(): static
+    {
+        $sections = [];
+
+        foreach (request()->sections as $sectionData) {
+            $section = $this->createSection($sectionData);
+            $sections[] = $section;
+        }
+
+        $this->saveSections($sections);
+
+        return $this;
+    }
+
+    protected function createSection($sectionData): Section
+    {
+        return $this->model->sections()->create([
+            'title' => $sectionData['title'],
+            'editing_title' => $sectionData['editingTitle'],
+        ]);
+    }
+
+    protected function saveSections($sections)
+    {
+        $this->model->sections()->saveMany($sections);
+    }
+
 }

@@ -6,7 +6,7 @@
                 v-model="formData.name"
             />
         </div>
-        <div class="section" v-for="(section, sectionIndex) in formData.sections" :key="sectionIndex" >
+        <div class="section" v-for="(section, sectionIndex) in formData.sections" :key="sectionIndex">
             <div class="section-header">
                 <div class="section-title">
                       <span v-if="section.editingTitle">
@@ -28,7 +28,7 @@
                 </div>
                 <span class="fa fa-trash cp" @click="removeSection(sectionIndex)"></span>
             </div>
-            <draggable v-model="section.content" element="div" class="form-fields p-5">
+            <draggable v-model="section.content" element="div" class="form-fields p-3">
                 <div v-for="(item, itemIndex) in section.content" :key="itemIndex" class="form-field card">
                     <div class="form-field-content card-body">
                         <div class="form-group d-flex">
@@ -55,7 +55,9 @@
                 </div>
             </draggable>
             <div class="add-subsection-section p-3 rounded mt-4 d-flex justify-content-between">
-                <span class="fa fa-plus cp" @click="addSubsection(sectionIndex)"></span>
+                <button class="btn btn-info w-100 cp" @click="addSubsection(sectionIndex)">
+                    <i class="fa fa-plus"></i>
+                </button>
             </div>
         </div>
         <div class="add-section-section p-3 border rounded mt-4 d-flex justify-content-between">

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CustomFieldType;
+use App\Models\Section;
 use Illuminate\Http\Request;
 
-class CustomFieldTypeController extends Controller
+class SectionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class CustomFieldTypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CustomFieldType $customFieldType)
+    public function show(Section $section)
     {
         //
     }
@@ -42,7 +42,7 @@ class CustomFieldTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(CustomFieldType $customFieldType)
+    public function edit(Section $section)
     {
         //
     }
@@ -50,7 +50,7 @@ class CustomFieldTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CustomFieldType $customFieldType)
+    public function update(Request $request, Section $section)
     {
         //
     }
@@ -58,7 +58,7 @@ class CustomFieldTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CustomFieldType $customFieldType)
+    public function destroy(Section $section)
     {
         //
     }

@@ -1,21 +1,37 @@
 <template>
     <div>
-        <label>Multiple Choice:</label>
-        <div v-for="(choice, index) in choices" :key="index">
-            <input type="radio" :id="'choice_' + index" v-model="selectedChoice" :value="choice" />
-            <label :for="'choice_' + index">{{ choice }}</label>
+        <label>{{ field.label || 'Default Label' }}</label>
+        <div v-for="(option, index) in field.options" :key="index">
+            <input type="checkbox" :id="getOptionId(index)" :value="option.value" v-model="option.checked" />
+            <input v-model="option.label" @input="updateOptionLabel(field, index)" />
+            <span class="fa fa-trash cp" @click="removeOption(field, index)"></span>
         </div>
-        <p>Selected choice: {{ selectedChoice }}</p>
+        <button @click="addOption(field)" class="btn btn-success mt-2">Add Option</button>
     </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            choices: ['Option 1', 'Option 2', 'Option 3', 'Option 4'], // Define your choices here
-            selectedChoice: '', // Initialize with an empty string
-        };
+    props: {
+        field: {
+            type: Object,
+            required: true,
+        },
+    },
+    methods: {
+        getOptionId(index) {
+            return `option_${index}`;
+        },
+        addOption(field) {
+            field.options.push({ label: "", value: "", checked: false });
+        },
+        removeOption(field, index) {
+            field.options.splice(index, 1);
+        },
+        updateOptionLabel(field, index) {
+            // Emit an event to notify the parent component of the label change
+            this.$emit("update-option-label", field, index);
+        },
     },
 };
 </script>

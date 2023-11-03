@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SubmitedFromRequest;
+use App\Http\Requests\FormRequest;
 use App\Models\Form;
 use App\Services\Form\FormService;
 
@@ -28,10 +28,13 @@ class FormController extends Controller
      * @param SubmitedFromRequest $request
      * @return array
      */
-    public function store(SubmitedFromRequest $request)
+    public function store(FormRequest $request)
     {
-        $this->service->save($request->only('title', 'editing_title'));
-        $this->service->saveCustomField();
+        $service = $this->service
+            ->setAttributes($request->only('name','sections'))
+            ->save($request->only('name'))
+            ->saveManySections();
+
         return created_responses('form');
     }
 
@@ -41,7 +44,7 @@ class FormController extends Controller
         return $form->load('form');
     }
 
-    public function update(Form $form, SubmitedFromRequest $request)
+    public function update(Form $form, FormRequest $request)
     {
         $form->update($request->only('name', 'editing_title'));
         return updated_responses('form');

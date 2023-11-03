@@ -5,7 +5,6 @@
             <input type="checkbox" :id="getOptionId(index)" :value="option.value" v-model="option.checked" />
             <input v-model="option.label" @input="updateOptionLabel(field, index)" />
             <span class="fa fa-trash cp" @click="removeOption(field, index)"></span>
-
         </div>
         <button  @click="addOption(field)"
                 class="btn btn-success mt-2">Add Option

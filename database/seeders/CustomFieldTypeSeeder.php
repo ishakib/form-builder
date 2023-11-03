@@ -1,7 +1,7 @@
 <?php
 namespace Database\Seeders;
 
-use App\Models\CustomFieldType;
+use App\Models\InputField;
 use Illuminate\Database\Seeder;
 
 class CustomFieldTypeSeeder extends Seeder
@@ -22,6 +22,6 @@ class CustomFieldTypeSeeder extends Seeder
             ['name' => 'number'],
         ];
 
-        CustomFieldType::query()->insert($field_types);
+        InputField::query()->insert($field_types);
     }
 }

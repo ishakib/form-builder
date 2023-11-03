@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CustomFieldValue;
+use App\Models\Content;
 use Illuminate\Http\Request;
 
-class CustomFieldValueController extends Controller
+class ContentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class CustomFieldValueController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CustomFieldValue $customFieldValue)
+    public function show(Content $content)
     {
         //
     }
@@ -42,7 +42,7 @@ class CustomFieldValueController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(CustomFieldValue $customFieldValue)
+    public function edit(Content $content)
     {
         //
     }
@@ -50,7 +50,7 @@ class CustomFieldValueController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CustomFieldValue $customFieldValue)
+    public function update(Request $request, Content $content)
     {
         //
     }
@@ -58,7 +58,7 @@ class CustomFieldValueController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CustomFieldValue $customFieldValue)
+    public function destroy(Content $content)
     {
         //
     }

@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('custom_field_types', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
+        Schema::create('contents', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('section_id');
+            $table->string('type');
+            $table->string('label');
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('custom_field_types');
+        Schema::dropIfExists('contents');
     }
 };

@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Form extends Model
+class Option extends Model
 {
     use HasFactory;
-    protected $fillable = ['name'];
+    protected $fillable = ['label', 'value', 'checked'];
 
-    public function sections()
+    public function content()
     {
-        return $this->hasMany(Section::class);
+        return $this->belongsTo(Content::class);
     }
-
 }
