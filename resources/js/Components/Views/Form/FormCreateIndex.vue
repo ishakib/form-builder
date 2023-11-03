@@ -6,7 +6,7 @@
                 v-model="formData.name"
             />
         </div>
-        <div v-for="(section, sectionIndex) in formData.sections" :key="sectionIndex" class="section">
+        <div class="section" v-for="(section, sectionIndex) in formData.sections" :key="sectionIndex" >
             <div class="section-header">
                 <div class="section-title">
                       <span v-if="section.editingTitle">
@@ -28,7 +28,7 @@
                 </div>
                 <span class="fa fa-trash cp" @click="removeSection(sectionIndex)"></span>
             </div>
-            <draggable v-model="section.content" element="div" class="form-fields">
+            <draggable v-model="section.content" element="div" class="form-fields p-5">
                 <div v-for="(item, itemIndex) in section.content" :key="itemIndex" class="form-field card">
                     <div class="form-field-content card-body">
                         <div class="form-group d-flex">
@@ -54,18 +54,16 @@
                     </div>
                 </div>
             </draggable>
-            <div class="add-subsection-section p-3 border rounded mt-4">
-                <button @click="addSubsection(sectionIndex)" class="btn btn-info p-2" style="margin-left: 10px;">Add
-                    Subsection
-                </button>
+            <div class="add-subsection-section p-3 rounded mt-4 d-flex justify-content-between">
+                <span class="fa fa-plus cp" @click="addSubsection(sectionIndex)"></span>
             </div>
         </div>
-        <div class="add-section-section p-3 border rounded mt-4">
+        <div class="add-section-section p-3 border rounded mt-4 d-flex justify-content-between">
             <div class="form-input p-2">
                 <label for="sectionTitle">Section Title:</label>
                 <input v-model="newSectionTitle" type="text" class="form-control" id="sectionTitle">
             </div>
-            <button @click="addSection" class="btn btn-success" style="margin-left: 10px;">Add Section</button>
+            <span class="fa fa-plus cp" @click="addSection"></span>
         </div>
         <div class="mt-3">
             <div class="d-flex justify-content-between">
