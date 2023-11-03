@@ -3,7 +3,9 @@
 
 namespace App\Services\Form;
 
+use App\Models\Content;
 use App\Models\Form;
+use App\Models\Option;
 use App\Services\BaseService;
 
 class FormService extends BaseService
@@ -24,31 +26,55 @@ class FormService extends BaseService
         return $this;
     }
 
-    public function saveManySections(): static
+    public function saveManySections()
     {
-        $sections = [];
+        $sectionsData = request()->sections ?? [];
 
-        foreach (request()->sections as $sectionData) {
+        foreach ($sectionsData as $sectionData) {
             $section = $this->createSection($sectionData);
-            $sections[] = $section;
+            $this->createAndSaveContents($section, $sectionData['content']);
         }
-
-        $this->saveSections($sections);
 
         return $this;
     }
 
-    protected function createSection($sectionData): Section
+    protected function createSection($sectionData)
     {
         return $this->model->sections()->create([
             'title' => $sectionData['title'],
-            'editing_title' => $sectionData['editingTitle'],
+            'editing_title' => $sectionData['editing_title'],
         ]);
     }
 
-    protected function saveSections($sections)
+    protected function createAndSaveContents($section, $contentData)
     {
-        $this->model->sections()->saveMany($sections);
+        foreach ($contentData as $contentItem) {
+            $content = $this->createContent($contentItem);
+            $section->contents()->save($content);
+
+            if (in_array($contentItem['type'], ['checkbox', 'multiple_choice']) && isset($contentItem['options'])) {
+                $this->createAndSaveOptions($content, $contentItem['options']);
+            }
+        }
     }
 
+    protected function createContent($contentItem)
+    {
+        return new Content([
+            'type' => $contentItem['type'],
+            'label' => $contentItem['label'],
+        ]);
+    }
+
+    protected function createAndSaveOptions($content, $optionsData)
+    {
+        foreach ($optionsData as $optionData) {
+            $option = new Option([
+                'label' => $optionData['label'],
+                'value' => $optionData['value'],
+                'checked' => $optionData['checked'],
+            ]);
+            $content->options()->save($option);
+        }
+    }
 }

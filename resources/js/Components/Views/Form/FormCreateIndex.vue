@@ -9,7 +9,7 @@
         <div class="section" v-for="(section, sectionIndex) in formData.sections" :key="sectionIndex">
             <div class="section-header">
                 <div class="section-title">
-                      <span v-if="section.editingTitle">
+                      <span v-if="section.editing_title">
                         <input
                             v-model="section.title"
                             @blur="saveSectionTitle(sectionIndex)"
@@ -120,7 +120,7 @@ export default {
             if (this.newSectionTitle) {
                 this.formData.sections.push({
                     title: this.newSectionTitle,
-                    editingTitle: false,
+                    editing_title: false,
                     content: [],
                 });
                 this.newSectionTitle = "";
@@ -140,13 +140,13 @@ export default {
             // Do any necessary processing here
         },
         editSectionTitle(sectionIndex) {
-            this.formData.sections[sectionIndex].editingTitle = true;
+            this.formData.sections[sectionIndex].editing_title = true;
         },
         saveSectionTitle(sectionIndex) {
-            this.formData.sections[sectionIndex].editingTitle = false;
+            this.formData.sections[sectionIndex].editing_title = false;
         },
         cancelEditSectionTitle(sectionIndex) {
-            this.formData.sections[sectionIndex].editingTitle = false;
+            this.formData.sections[sectionIndex].editing_title = false;
         },
         removeSection(sectionIndex) {
             this.formData.sections.splice(sectionIndex, 1);

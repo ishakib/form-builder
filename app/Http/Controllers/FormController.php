@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FormRequest;
+use App\Http\Requests\SubmittedFormRequest;
 use App\Models\Form;
 use App\Services\Form\FormService;
 
@@ -24,11 +24,7 @@ class FormController extends Controller
             ->paginate(request('per_page', 15));
     }
 
-    /**
-     * @param SubmitedFromRequest $request
-     * @return array
-     */
-    public function store(FormRequest $request)
+    public function store(SubmittedFormRequest $request)
     {
         $service = $this->service
             ->setAttributes($request->only('name','sections'))
@@ -44,7 +40,7 @@ class FormController extends Controller
         return $form->load('form');
     }
 
-    public function update(Form $form, FormRequest $request)
+    public function update(Form $form, SubmittedFormRequest $request)
     {
         $form->update($request->only('name', 'editing_title'));
         return updated_responses('form');

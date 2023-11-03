@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Content extends Model
 {
@@ -16,12 +18,12 @@ class Content extends Model
         return $this->hasMany(Option::class);
     }
 
-    public function section()
+    public function section(): BelongsTo
     {
         return $this->belongsTo(Section::class);
     }
 
-    public function inputField()
+    public function inputField(): HasOne
     {
         return $this->hasOne(InputField::class);
     }
