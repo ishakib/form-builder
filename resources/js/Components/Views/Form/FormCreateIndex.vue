@@ -1,6 +1,12 @@
 <template>
     <div class="form-builder">
-        <div v-for="(section, sectionIndex) in sections" :key="sectionIndex" class="section">
+        <div class="form-input p-2">
+            <label for="inputType">Form name:</label>
+            <input
+                v-model="formData.name"
+            />
+        </div>
+        <div v-for="(section, sectionIndex) in formData.sections" :key="sectionIndex" class="section">
             <div class="section-header">
                 <div class="section-title">
                       <span v-if="section.editingTitle">
@@ -12,10 +18,12 @@
                             class="section-title-input form-control"
                         />
                         <button @click="saveSectionTitle(sectionIndex)" class="btn btn-primary mt-3">Save</button>
-                        <button @click="cancelEditSectionTitle(sectionIndex)" class="btn btn-secondary mt-3">Cancel</button>
+                        <button @click="cancelEditSectionTitle(sectionIndex)"
+                                class="btn btn-secondary mt-3">Cancel</button>
                       </span>
                     <span v-else> {{ section.title }}
-                        <button @click="editSectionTitle(sectionIndex)" class="btn btn-outline-primary ml-2">Edit</button>
+                        <button @click="editSectionTitle(sectionIndex)"
+                                class="btn btn-outline-primary ml-2">Edit</button>
                     </span>
                 </div>
                 <span class="fa fa-trash cp" @click="removeSection(sectionIndex)"></span>
@@ -91,7 +99,10 @@ export default {
     },
     data() {
         return {
-            sections: [],
+            formData: {
+                name: '',
+                sections: [],
+            },
             newSectionTitle: "",
             inputTypes: [
                 {value: "short_answer", label: "Short Answer"},
@@ -107,7 +118,7 @@ export default {
     methods: {
         addSection() {
             if (this.newSectionTitle) {
-                this.sections.push({
+                this.formData.sections.push({
                     title: this.newSectionTitle,
                     editingTitle: false,
                     content: [],
@@ -116,7 +127,7 @@ export default {
             }
         },
         addSubsection(sectionIndex) {
-            this.sections[sectionIndex].content.push({
+            this.formData.sections[sectionIndex].content.push({
                 type: "checkbox",
                 label: "",
                 options: [{label: "", value: "", checked: false}],
@@ -129,32 +140,28 @@ export default {
             // Do any necessary processing here
         },
         editSectionTitle(sectionIndex) {
-            this.sections[sectionIndex].editingTitle = true;
+            this.formData.sections[sectionIndex].editingTitle = true;
         },
         saveSectionTitle(sectionIndex) {
-            this.sections[sectionIndex].editingTitle = false;
+            this.formData.sections[sectionIndex].editingTitle = false;
         },
         cancelEditSectionTitle(sectionIndex) {
-            this.sections[sectionIndex].editingTitle = false;
+            this.formData.sections[sectionIndex].editingTitle = false;
         },
         removeSection(sectionIndex) {
-            this.sections.splice(sectionIndex, 1);
+            this.formData.sections.splice(sectionIndex, 1);
         },
         removeItem(sectionIndex, itemIndex) {
-            this.sections[sectionIndex].content.splice(itemIndex, 1);
+            this.formData.sections[sectionIndex].content.splice(itemIndex, 1);
         },
         submitForm() {
-            const formData = {
-                sections: this.sections,
-            };
-            // Send a POST request with Axios here
-            // axios.post('/your-api-endpoint', formData)
-            //   .then(response => {
-            //     console.log('Form submitted successfully');
-            //   })
-            //   .catch(error => {
-            //     console.error('Error submitting the form', error);
-            //   });
+            axios.post('/admin/form', this.formData)
+                .then(response => {
+                    console.log('Form submitted successfully');
+                })
+                .catch(error => {
+                    console.error('Error submitting the form', error);
+                });
         },
         fieldComponentName(type) {
             const componentMap = {
@@ -169,12 +176,8 @@ export default {
             return componentMap[type] || "div";
         },
         addOption(sectionIndex, itemIndex) {
-            this.sections[sectionIndex].content[itemIndex].options.push({label: "New Option", value: ""});
+            this.formData.sections[sectionIndex].content[itemIndex].options.push({label: "New Option", value: ""});
         },
     }
 }
 </script>
-
-<style scoped>
-/* Your styles go here */
-</style>
