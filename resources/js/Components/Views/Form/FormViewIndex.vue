@@ -1,12 +1,9 @@
 <template>
     <div class="form-builder">
         <div class="form-input p-2">
-            <label for="inputType">Form name:</label>
-            <input
-                v-model="dataForm.name"
-            />
+            <label for="inputType">{{dataForm.name}}</label>
         </div>
-        <div class="section" v-for="(section, sectionIndex) in dataForm.sections" :key="sectionIndex">
+        <div v-for="(section, sectionIndex) in dataForm.sections" :key="sectionIndex">
             <div v-for="(item, itemIndex) in section.contents" :key="itemIndex" class="form-field card">
                 <div class="form-field-content card-body">
                     <component

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Form List</h1>
-        <table-component :items="tableData"></table-component>
+        <table-component :items="list"></table-component>
     </div>
 </template>
 
@@ -9,6 +9,11 @@
 import TableComponent from "../Helpers/TableComponent.vue";
 
 export default {
+    props: {
+        list: {
+          default:[]
+        },
+    },
     data() {
         return {
             tableData: [

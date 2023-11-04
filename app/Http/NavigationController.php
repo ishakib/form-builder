@@ -20,7 +20,13 @@ class NavigationController extends Controller
 
     public function formList()
     {
-        return view('application.form.list');
+        $list = Form::all();
+
+        ;
+        foreach ($list as $form) {
+            $form->link = url('/'.$form->slug);
+        }
+        return view('application.form.list', ['list' =>$list]);
     }
 
     public function viewForm($slug)

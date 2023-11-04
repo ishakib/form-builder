@@ -3,6 +3,7 @@
 @section('title', 'Form Submit')
 
 @section('contents')
-    <form-list></form-list>
+    <form-list
+    :list="{{$list}}"></form-list>
 @endsection
 
