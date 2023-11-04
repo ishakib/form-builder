@@ -22,7 +22,10 @@ class SubmittedFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|unique:forms,name|string|max:255',
+            'sections' => 'required|array',
+            'sections.*.content.*.label' => 'required|string',
+            'sections.*.content.*.options.*.label' => 'required|string',
         ];
     }
 }

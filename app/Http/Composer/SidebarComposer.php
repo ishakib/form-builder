@@ -14,8 +14,8 @@ class SidebarComposer
                 'url' => request()->root() . '/admin/form-create',
             ],
             [
-                'name' => 'Form Submit',
-                'url' => request()->root() . '/admin/form-submit',
+                'name' => 'Form List',
+                'url' => request()->root() . '/admin/form-list',
             ],
         ]]);
     }
