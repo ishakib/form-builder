@@ -5,14 +5,17 @@ namespace App\Services\Form;
 
 use App\Models\Content;
 use App\Models\Form;
+use App\Models\InputField;
 use App\Models\Option;
 use App\Services\BaseService;
 
 class FormService extends BaseService
 {
+    protected $inputFields = [];
     public function __construct(Form $form)
     {
         $this->model = $form;
+
     }
 
     public function save($options = [])
@@ -28,6 +31,7 @@ class FormService extends BaseService
 
     public function saveManySections()
     {
+        $this->inputFields = collect(InputField::query()->get());
         $sectionsData = request()->sections ?? [];
 
         foreach ($sectionsData as $sectionData) {
@@ -50,7 +54,7 @@ class FormService extends BaseService
     {
         foreach ($contentData as $contentItem) {
             $content = $this->createContent($contentItem);
-            $section->contents()->save($content);
+            $section = $section->contents()->save($content);
 
             if (in_array($contentItem['type'], ['checkbox', 'multiple_choice']) && isset($contentItem['options'])) {
                 $this->createAndSaveOptions($content, $contentItem['options']);
@@ -58,11 +62,12 @@ class FormService extends BaseService
         }
     }
 
-    protected function createContent($contentItem)
+    protected function createContent($contentItem): Content
     {
         return new Content([
             'type' => $contentItem['type'],
             'label' => $contentItem['label'],
+            'input_field_id' => $this->inputFields->where('name', $contentItem['type'])->first()->id ?? null,
         ]);
     }
 
@@ -70,6 +75,7 @@ class FormService extends BaseService
     {
         foreach ($optionsData as $optionData) {
             $option = new Option([
+                'content_id' => $content->id,
                 'label' => $optionData['label'],
                 'value' => $optionData['value'],
                 'checked' => $optionData['checked'],

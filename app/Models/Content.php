@@ -11,7 +11,7 @@ class Content extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type', 'label'];
+    protected $fillable = ['type', 'label', 'input_field_id'];
 
     public function options()
     {

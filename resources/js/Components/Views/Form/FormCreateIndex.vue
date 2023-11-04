@@ -39,8 +39,8 @@
                             <div class="form-input p-2">
                                 <label for="inputType">Select an Input Type:</label>
                                 <select v-model="item.type" class="form-control" id="inputType">
-                                    <option v-for="type in inputTypes" :key="type.value" :value="type.value">
-                                        {{ type.label }}
+                                    <option v-for="inputType in inputTypes" :key="inputType.id" :value="inputType.name">
+                                        {{ inputType.name.toUpperCase() }}
                                     </option>
                                 </select>
                             </div>
@@ -87,6 +87,12 @@ import DateField from "./Input/Date.vue";
 
 export default {
     name: "FormCreateIndex",
+    props: {
+        inputTypes: {
+            type: Array,
+            required: true,
+        },
+    },
     components: {
         draggable,
         ShortAnswerField,
@@ -103,16 +109,6 @@ export default {
                 name: '',
                 sections: [],
             },
-            newSectionTitle: "",
-            inputTypes: [
-                {value: "short_answer", label: "Short Answer"},
-                {value: "long_answer", label: "Long Answer"},
-                {value: "checkbox", label: "Checkbox"},
-                {value: "multiple_choice", label: "Multiple Choice"},
-                {value: "dropdown", label: "Dropdown"},
-                {value: "time", label: "Time"},
-                {value: "date", label: "Date"}
-            ]
         };
     },
     methods: {

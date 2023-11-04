@@ -4,12 +4,14 @@ namespace App\Http;
 
 use App\Http\Controllers\Controller;
 use App\Models\Form;
+use App\Models\InputField;
 
 class NavigationController extends Controller
 {
     public function formCreate()
     {
-        return view('application.form.form_create');
+        $input_fields = InputField::query()->select(['id','name'])->get()->toArray();
+        return view('application.form.form_create', ['input_fields' => $input_fields]);
     }
     public function formSubmit()
     {
@@ -24,6 +26,7 @@ class NavigationController extends Controller
     public function viewForm($slug)
     {
         $data = Form::query()->with(['sections','sections.contents', 'sections.contents.options'])->where('slug',$slug )->first();
-        return view('application.form.form_view', ['data_form' => $data]);
+        $input_fields = InputField::query()->select(['id','name'])->get()->toArray();
+        return view('application.form.form_view', ['data_form' => $data, 'input_fields' =>$input_fields]);
     }
 }

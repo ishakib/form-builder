@@ -2,55 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SubmissionRequest;
 use App\Http\Requests\SubmittedFormRequest;
-use App\Models\Form;
 use App\Services\Form\FormService;
+use App\Services\Form\FormSubmissionService;
 
 class FormController extends Controller
 {
 
-    public function __construct(FormService $service)
+    public function __construct(FormService $service, FormSubmissionService $formSubmissionService)
     {
         $this->service = $service;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function index()
-    {
-        return $this->service
-            ->orderBy('id', 'DESC')
-            ->paginate(request('per_page', 15));
+        $this->formSubmissionService = $formSubmissionService;
     }
 
     public function store(SubmittedFormRequest $request)
     {
         $service = $this->service
-            ->setAttributes($request->only('name','sections'))
+            ->setAttributes($request->only('name', 'sections'))
             ->save($request->only('name'))
             ->saveManySections();
 
         return created_responses('form');
     }
 
-
-    public function show(Form $form)
+    public function storeSubmission(SubmissionRequest $request)
     {
-        return $form->load('form');
-    }
 
-    public function update(Form $form, SubmittedFormRequest $request)
-    {
-        $form->update($request->only('name', 'editing_title'));
-        return updated_responses('form');
-    }
-
-    public function destroy(Form $form)
-    {
-        if ($form->delete()) {
-            return deleted_responses('form');
-        }
-        return failed_responses();
+        $this->formSubmissionService
+            ->setAttributes(array_merge($request->only('form_id'), [
+                'data'=>json_encode($request->data),
+                'user_id' => auth()->user()->id
+            ]))
+            ->save();
+        return created_responses('form');
     }
 }

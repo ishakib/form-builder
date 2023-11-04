@@ -7,7 +7,6 @@ window.Vue = Vue;
 Vue.component('side-bar', require('./Components/Views/Layouts/Sidebar').default);
 Vue.component('form-create', require('./Components/Views/Form/FormCreateIndex').default);
 Vue.component('form-view', require('./Components/Views/Form/FormViewIndex.vue').default);
-Vue.component('form-submit', require('./Components/Views/Form/FormSubmitIndex').default);
 Vue.component('form-list', require('./Components/Views/Form/FormList.vue').default);
 
 

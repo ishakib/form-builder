@@ -6,7 +6,8 @@
             <input v-model="option.label" @input="updateOptionLabel(field, index)" />
             <span class="fa fa-trash cp" @click="removeOption(field, index)"></span>
         </div>
-        <button  @click="addOption(field)"
+        <button v-if="editorMode"
+                @click="addOption(field)"
                 class="btn btn-success mt-2">Add Option
         </button>
     </div>
@@ -19,6 +20,10 @@ export default {
             type: Object,
             required: true,
         },
+        editorMode: {
+            type: Boolean,
+            default: true,
+        }
     },
     methods: {
         getOptionId(index) {

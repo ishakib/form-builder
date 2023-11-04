@@ -4,7 +4,7 @@ namespace Database\Seeders;
 use App\Models\InputField;
 use Illuminate\Database\Seeder;
 
-class CustomFieldTypeSeeder extends Seeder
+class InputFieldSeeder extends Seeder
 {
     /**
      * Run the database seeders.
@@ -14,12 +14,13 @@ class CustomFieldTypeSeeder extends Seeder
     public function run()
     {
         $field_types = [
-            ['name' => 'text'],
-            ['name' => 'textarea'],
-            ['name' => 'radio'],
-            ['name' => 'select'],
+            ['name' => 'short_answer'],
+            ['name' => 'long_answer'],
+            ['name' => 'checkbox'],
+            ['name' => 'multiple_choice'],
+            ['name' => 'dropdown'],
+            ['name' => 'time'],
             ['name' => 'date'],
-            ['name' => 'number'],
         ];
 
         InputField::query()->insert($field_types);

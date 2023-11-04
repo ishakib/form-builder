@@ -1,35 +1,25 @@
 <template>
-    <div>
-        <h1>Form View</h1>
-
-        <!-- Loop through sections -->
-        <div v-for="(section, sectionIndex) in dataForm.sections" :key="sectionIndex">
-            <div class="section-header">
-                <div class="section-title">
-                    <span>{{ section.title }}</span>
-                </div>
-            </div>
-
-            <!-- Loop through content within each section -->
-            <div v-for="(item, itemIndex) in section.content" :key="itemIndex" class="form-field card">
+    <div class="form-builder">
+        <div class="form-input p-2">
+            <label for="inputType">Form name:</label>
+            <input
+                v-model="dataForm.name"
+            />
+        </div>
+        <div class="section" v-for="(section, sectionIndex) in dataForm.sections" :key="sectionIndex">
+            <div v-for="(item, itemIndex) in section.contents" :key="itemIndex" class="form-field card">
                 <div class="form-field-content card-body">
-                    <div class="form-group d-flex">
-                        <div class="form-input p-2">
-                            <label for="label">Label Name:</label>
-                            <input v-model="item.label" type="text" class="form-control" id="label">
-                        </div>
-                        <div class="form-input p-2">
-                            <label for="inputType">Input Type:</label>
-                            <span>{{ getInputTypeLabel(item.type) }}</span>
-                        </div>
-                    </div>
-
-                    <!-- Render the appropriate input component based on the type -->
                     <component
                         :is="fieldComponentName(item.type)"
                         :field="item"
-                    ></component>
+                        :editor-mode="false"
+                    />
                 </div>
+            </div>
+        </div>
+        <div class="mt-3">
+            <div class="d-flex justify-content-between">
+                <button @click="submitForm" class="btn btn-primary w-100">Submit Form</button>
             </div>
         </div>
     </div>
@@ -52,6 +42,10 @@ export default {
             name: '',
             sections: [],
         },
+        inputTypes: {
+            type: Array,
+            required: true,
+        },
     },
     components: {
         ShortAnswerField,
@@ -61,6 +55,15 @@ export default {
         DropDownField,
         TimeField,
         DateField,
+    },
+    data() {
+        return {
+            formData: {
+                name: '',
+                sections: [],
+            },
+            newSectionTitle: "",
+        };
     },
     methods: {
         fieldComponentName(type) {
@@ -87,6 +90,19 @@ export default {
             };
             return inputTypeMap[type] || "Unknown";
         },
+        submitForm() {
+            const formdata = {
+                data: this.formData,
+                form_id: this.dataForm.id
+            }
+            axios.post('/form/submission', formdata)
+                .then(response => {
+                    console.log('Form submitted successfully');
+                })
+                .catch(error => {
+                    console.error('Error submitting the form', error);
+                });
+        }
     }
 };
 </script>

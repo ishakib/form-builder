@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('options', function (Blueprint $table) {
+        Schema::create('submissions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('content_id');
-            $table->string('label')->nullable();
-            $table->string('value')->nullable();
-            $table->boolean('checked')->default(false);
+            $table->json('data');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('form_id');
             $table->timestamps();
         });
     }
